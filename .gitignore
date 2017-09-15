@@ -1,3 +1,6 @@
+# Random littering
+*~
+
 # http://www.gnu.org/software/automake
 
 Makefile.in
@@ -6,6 +9,7 @@ Makefile.in
 /py-compile
 /test-driver
 /ylwrap
+.deps
 
 # http://www.gnu.org/software/autoconf
 
@@ -14,6 +18,8 @@ Makefile.in
 /autoscan-*.log
 /aclocal.m4
 /compile
+/config.log
+/config.status
 /config.guess
 /config.h.in
 /config.sub
@@ -23,6 +29,9 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
+
+Makefile
+config.h
 
 # https://www.gnu.org/software/libtool/
 
