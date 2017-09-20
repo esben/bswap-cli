@@ -23,6 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <endian.h>
 #include <byteswap.h>
 
 static void usage(const char *progname)
@@ -39,7 +40,7 @@ static void read_bswap_write_16(FILE *in, FILE *out)
 	if (read == 0)
 		return;
 	if (read < sizeof(buf))
-		buf &= ((1 << (read * 8)) - 1);
+		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_16(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
@@ -53,7 +54,7 @@ static void read_bswap_write_32(FILE *in, FILE *out)
 	if (read == 0)
 		return;
 	if (read < sizeof(buf))
-		buf &= ((1 << (read * 8)) - 1);
+		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_32(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
@@ -67,7 +68,7 @@ static void read_bswap_write_64(FILE *in, FILE *out)
 	if (read == 0)
 		return;
 	if (read < sizeof(buf))
-		buf &= ((1 << (read * 8)) - 1);
+		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_64(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
@@ -121,15 +122,17 @@ int main(int argc, char **argv)
 	}
  
 	while (1) {
-		if (feof(in))
-			break;
 		if (ferror(in) || ferror(out))
 			return EXIT_FAILURE;
+		if (feof(in))
+			break;
 		read_bswap_write(in, out);
 	}
 
-	fclose(in);
-	fclose(out);
+	if (fclose(in))
+		return EXIT_FAILURE;
+	if (fclose(out))
+		return EXIT_FAILURE;
 
 	return EXIT_SUCCESS;
 }
