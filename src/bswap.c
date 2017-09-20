@@ -33,42 +33,36 @@ static void usage(const char *progname)
 
 static void read_bswap_write_16(FILE *in, FILE *out)
 {
-	uint16_t buf;
+	uint16_t buf = 0;
 	size_t read;
 
 	read = fread(&buf, 1, sizeof(buf), in);
 	if (read == 0)
 		return;
-	if (read < sizeof(buf))
-		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_16(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
 
 static void read_bswap_write_32(FILE *in, FILE *out)
 {
-	uint32_t buf;
+	uint32_t buf = 0;
 	size_t read;
 
 	read = fread(&buf, 1, sizeof(buf), in);
 	if (read == 0)
 		return;
-	if (read < sizeof(buf))
-		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_32(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
 
 static void read_bswap_write_64(FILE *in, FILE *out)
 {
-	uint64_t buf;
+	uint64_t buf = 0;
 	size_t read;
 
 	read = fread(&buf, 1, sizeof(buf), in);
 	if (read == 0)
 		return;
-	if (read < sizeof(buf))
-		memset(((void *)&buf) + read, 0, sizeof(buf) - read);
 	buf = bswap_64(buf);
 	fwrite(&buf, 1, sizeof(buf), out);
 }
